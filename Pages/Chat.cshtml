@@ -1,0 +1,17 @@
+@page
+@model ChatModel
+@{
+    ViewData["Title"] = "Chat";
+}
+
+<h1>Simple Chat</h1>
+
+<form method="post">
+    <input type="text" name="Message" placeholder="Enter message..." />
+    <button type="submit">Send</button>
+</form>
+
+@if (Model.Response != null)
+{
+    <p><b>Bot:</b> @Model.Response</p>
+}
