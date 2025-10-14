@@ -1,0 +1,21 @@
+﻿@model List<ChatSite.Controllers.Product>
+
+<h2>ფასების ფილტრი</h2>
+
+<form method="get" asp-action="FilterPrices">
+    <label for="minPrice">Min $:</label>
+    <input type="number" step="0.01" name="minPrice" id="minPrice" placeholder="0.00" />
+
+    <label for="maxPrice">Max $:</label>
+    <input type="number" step="0.01" name="maxPrice" id="maxPrice" placeholder="1000.00" />
+
+    <button type="submit">ფილტრი</button>
+</form>
+
+<h3>პროდუქტები:</h3>
+<ul>
+    @foreach (var product in Model)
+    {
+        <li>@product.Name - $@product.Price</li>
+    }
+</ul>

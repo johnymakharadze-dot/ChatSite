@@ -29,3 +29,16 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+body {
+  margin-bottom: 60px;
+
+  background-color: #000000; /* შავი ფონია */
+  color: #ffffff; /* ტექსტი თეთრი */
+}
+
+/* სურვილისამებრ, ინპუტებს და ღილაკებსაც შავი ფონი მიეცი */
+input, button {
+  background-color: #222222; /* ცოტა ღია შავი */
+  color: #ffffff;
+  border: 1px solid #555555;
+}
