@@ -1,6 +1,6 @@
 ﻿@model List<ChatSite.Controllers.Product>
 
-<h2>ფასების ფილტრი</h2>
+<h2>Price Filter</h2>
 
 <form method="get" asp-action="FilterPrices">
     <label for="minPrice">Min $:</label>
@@ -12,10 +12,11 @@
     <button type="submit">ფილტრი</button>
 </form>
 
-<h3>პროდუქტები:</h3>
-<ul>
-    @foreach (var product in Model)
-    {
-        <li>@product.Name - $@product.Price</li>
-    }
-</ul>
+<h2></h2>
+
+<details>
+    <summary>Sector</summary>
+    <form method="get" asp-action="FilterBySector">
+        <label><input type="checkbox" name="sector" value="Tech" /> Tech</label><br/>
+        <label><input type="checkbox" name="sector" value="Finance" /> Finance</label><br/>
+
