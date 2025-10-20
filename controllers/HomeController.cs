@@ -22,26 +22,35 @@ namespace ChatSite.Controllers
         }
 
         [HttpGet]
-        public IActionResult FilterAll(decimal? minPrice, decimal? maxPrice, string[] sector,
+        public IActionResult FilterAll(
+            decimal? minPrice, decimal? maxPrice, string[]? sector,
             int? minVolume, int? maxVolume,
             bool lowPE = false, bool highROE = false,
             bool lowRSI = false, bool aboveMA = false)
         {
             var filtered = products.AsEnumerable();
 
-            if (minPrice.HasValue) filtered = filtered.Where(p => p.Price >= minPrice.Value);
-            if (maxPrice.HasValue) filtered = filtered.Where(p => p.Price <= maxPrice.Value);
+            if (minPrice.HasValue)
+                filtered = filtered.Where(p => p.Price >= minPrice.Value);
+            if (maxPrice.HasValue)
+                filtered = filtered.Where(p => p.Price <= maxPrice.Value);
 
-            if (sector != null && sector.Length > 0)
+            if (sector != null && sector.Any())
                 filtered = filtered.Where(p => sector.Contains(p.Sector));
 
-            if (minVolume.HasValue) filtered = filtered.Where(p => p.Volume >= minVolume.Value);
-            if (maxVolume.HasValue) filtered = filtered.Where(p => p.Volume <= maxVolume.Value);
+            if (minVolume.HasValue)
+                filtered = filtered.Where(p => p.Volume >= minVolume.Value);
+            if (maxVolume.HasValue)
+                filtered = filtered.Where(p => p.Volume <= maxVolume.Value);
 
-            if (lowPE) filtered = filtered.Where(p => p.PE < 20);
-            if (highROE) filtered = filtered.Where(p => p.ROE > 15);
-            if (lowRSI) filtered = filtered.Where(p => p.RSI < 40);
-            if (aboveMA) filtered = filtered.Where(p => p.Price > p.MovingAverage);
+            if (lowPE)
+                filtered = filtered.Where(p => p.PE < 20);
+            if (highROE)
+                filtered = filtered.Where(p => p.ROE > 15);
+            if (lowRSI)
+                filtered = filtered.Where(p => p.RSI < 40);
+            if (aboveMA)
+                filtered = filtered.Where(p => p.Price > p.MovingAverage);
 
             return View("Index", filtered.ToList());
         }
