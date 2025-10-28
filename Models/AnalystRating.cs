@@ -1,4 +1,4 @@
-namespace ChatSite.Models
+/*namespace ChatSite.Models
 {
     public class AnalystRating
     {
@@ -8,6 +8,8 @@ namespace ChatSite.Models
         public decimal Rating { get; set; }
         public string Comment { get; set; } = string.Empty;
     }
-    
-    
-}
+
+
+}*/
+
+

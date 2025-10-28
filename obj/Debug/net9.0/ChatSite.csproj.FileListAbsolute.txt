@@ -219,3 +219,4 @@ C:\Users\User\ChatSite\bin\Debug\net9.0\runtimes\win-x64\native\e_sqlite3.dll
 C:\Users\User\ChatSite\bin\Debug\net9.0\runtimes\win-x86\native\e_sqlite3.dll
 C:\Users\User\ChatSite\obj\Debug\net9.0\ChatSite.csproj.AssemblyReference.cache
 C:\Users\User\ChatSite\obj\Debug\net9.0\ChatSite.csproj.Up2Date
+C:\Users\User\ChatSite\obj\Debug\net9.0\compressed\ycl4v7tc20-mbaa8lr74g.gz
