@@ -1,4 +1,5 @@
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -9,8 +10,9 @@ namespace ChatSite.Services
     public class StockQuote
     {
         public string Symbol { get; set; } = "";
-        public string CompanyName { get; set; } = "";
         public decimal Price { get; set; }
+        // Free API Short Quote არ აბრუნებს CompanyName/Sector, ამიტომ ისინი შეიძლება დარჩეს ცარიელი
+        public string CompanyName { get; set; } = "";
         public string Sector { get; set; } = "";
     }
 
@@ -23,15 +25,38 @@ namespace ChatSite.Services
         {
             _http = factory.CreateClient("fmp");
             _apiKey = configuration["FinancialModelingPrep:ApiKey"] ?? "";
+
+            _http.DefaultRequestHeaders.UserAgent.ParseAdd("ChatSiteApp/1.0");
+            _http.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        // 10 NASDAQ Stocks
-        public async Task<List<StockQuote>> GetStockQuotesAsync(string exchange = "NASDAQ")
+        public async Task<List<StockQuote>> GetStockQuotesAsync()
         {
-            // Free API: limit 10 + API Key
-            var url = $"stock/list?exchange={exchange}&limit=10&apikey={_apiKey}";
-            var data = await _http.GetFromJsonAsync<List<StockQuote>>(url);
-            return data ?? new List<StockQuote>();
+            var symbols = new string[]
+            {
+                "AAPL", "MSFT", "GOOGL", "AMZN", "FB",
+                "NVDA", "TSLA", "BABA", "JPM", "V"
+            };
+
+            var result = new List<StockQuote>();
+
+            foreach (var symbol in symbols)
+            {
+                var url = $"https://financialmodelingprep.com/api/v3/quote-short/{symbol}?apikey={_apiKey}";
+
+                try
+                {
+                    var data = await _http.GetFromJsonAsync<List<StockQuote>>(url);
+                    if (data != null) result.AddRange(data);
+                }
+                catch (HttpRequestException ex)
+                {
+                    Console.WriteLine($"HTTP Error for {symbol}: {ex.Message}");
+                }
+            }
+
+            return result;
         }
     }
 }

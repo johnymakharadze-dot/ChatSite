@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
 using ChatSite.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,4 +29,4 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 // აპის გაშვება
-app.Run("http://localhost:5000");
+app.Run();
