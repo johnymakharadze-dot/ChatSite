@@ -2,24 +2,37 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 
 namespace ChatSite.Services
 {
+    public class StockQuote
+    {
+        public string Symbol { get; set; } = "";
+        public string CompanyName { get; set; } = "";
+        public decimal Price { get; set; }
+        public string Sector { get; set; } = "";
+    }
+
     public class FmpService
     {
-        private readonly IHttpClientFactory _httpClientFactory;
-        private const string ApiKey = "demo"; // შეგიძლია შენი key ჩასვა როცა მოიპოვებ
+        private readonly HttpClient _http;
+        private readonly string _apiKey;
 
-        public FmpService(IHttpClientFactory httpClientFactory)
+        public FmpService(IHttpClientFactory factory, IConfiguration configuration)
         {
-            _httpClientFactory = httpClientFactory;
+            _http = factory.CreateClient("fmp");
+            _apiKey = configuration["FinancialModelingPrep:ApiKey"] ?? "";
+
+            _http.DefaultRequestHeaders.UserAgent.ParseAdd("ChatSiteApp/1.0");
         }
 
-        public async Task<List<StockQuote>> GetStockQuotesAsync(string exchange = "NASDAQ")
+        public async Task<List<StockQuote>> GetStockQuotesAsync()
         {
-            var client = _httpClientFactory.CreateClient("fmp");
-            var response = await client.GetAsync($"stock-screener?exchange={exchange}&limit=10&apikey={ApiKey}");
-            
+            // ყველა საჭირო NASDAQ სიმბოლო ერთ API request–ით
+            var url = $"stock-screener?exchange=NASDAQ&limit=50&apikey={_apiKey}";
+
+            var response = await _http.GetAsync(url);
             response.EnsureSuccessStatusCode();
 
             var json = await response.Content.ReadAsStringAsync();
@@ -27,13 +40,5 @@ namespace ChatSite.Services
 
             return JsonSerializer.Deserialize<List<StockQuote>>(json, options) ?? new List<StockQuote>();
         }
-    }
-
-    public class StockQuote
-    {
-        public string Symbol { get; set; } = string.Empty;
-        public string CompanyName { get; set; } = string.Empty;
-        public decimal Price { get; set; }
-        public string Sector { get; set; } = string.Empty;
     }
 }

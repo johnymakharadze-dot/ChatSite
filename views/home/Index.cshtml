@@ -11,7 +11,7 @@
     <label>Max Price: <input type="number" step="0.01" name="maxPrice" /></label>
     <label>Sector:
         <select name="sector" multiple>
-            @foreach(var s in Model.Select(p => p.Sector).Distinct())
+            @foreach (var s in Model.Select(p => p.Sector).Distinct())
             {
                 <option value="@s">@s</option>
             }
@@ -23,18 +23,27 @@
 <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse; width:100%;">
     <thead>
         <tr>
-            <th>Name</th>
+            <th>Symbol</th>
             <th>Price</th>
             <th>Sector</th>
         </tr>
     </thead>
     <tbody>
-        @foreach(var p in Model)
+        @if (Model != null && Model.Any())
+        {
+            foreach (var p in Model)
+            {
+                <tr>
+                    <td>@p.Name</td>
+                    <td>@p.Price.ToString("F2")</td>
+                    <td>@p.Sector</td>
+                </tr>
+            }
+        }
+        else
         {
             <tr>
-                <td>@p.Name</td>
-                <td>@p.Price</td>
-                <td>@p.Sector</td>
+                <td colspan="3" style="text-align:center;">No stocks available</td>
             </tr>
         }
     </tbody>

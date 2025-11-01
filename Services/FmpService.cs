@@ -1,5 +1,4 @@
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -11,9 +10,8 @@ namespace ChatSite.Services
     {
         public string Symbol { get; set; } = "";
         public decimal Price { get; set; }
-        // Free API Short Quote არ აბრუნებს CompanyName/Sector, ამიტომ ისინი შეიძლება დარჩეს ცარიელი
-        public string CompanyName { get; set; } = "";
-        public string Sector { get; set; } = "";
+        public string CompanyName { get; set; } = "N/A";
+        public string Sector { get; set; } = "N/A";
     }
 
     public class FmpService
@@ -24,39 +22,27 @@ namespace ChatSite.Services
         public FmpService(IHttpClientFactory factory, IConfiguration configuration)
         {
             _http = factory.CreateClient("fmp");
-            _apiKey = configuration["FinancialModelingPrep:ApiKey"] ?? "";
+            _apiKey = configuration["FinancialModelingPrep:ApiKey"] ?? "demo";
 
             _http.DefaultRequestHeaders.UserAgent.ParseAdd("ChatSiteApp/1.0");
-            _http.DefaultRequestHeaders.Accept.Add(
-                new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
         public async Task<List<StockQuote>> GetStockQuotesAsync()
         {
-            var symbols = new string[]
+            // უფასო API key–ით მხოლოდ ეს endpoint სტაბილურად მუშაობს
+            var symbols = "AAPL,MSFT,GOOGL,AMZN,FB,NVDA,TSLA,BABA,JPM,V";
+            var url = $"quote-short/{symbols}?apikey={_apiKey}";
+
+            try
             {
-                "AAPL", "MSFT", "GOOGL", "AMZN", "FB",
-                "NVDA", "TSLA", "BABA", "JPM", "V"
-            };
-
-            var result = new List<StockQuote>();
-
-            foreach (var symbol in symbols)
-            {
-                var url = $"https://financialmodelingprep.com/api/v3/quote-short/{symbol}?apikey={_apiKey}";
-
-                try
-                {
-                    var data = await _http.GetFromJsonAsync<List<StockQuote>>(url);
-                    if (data != null) result.AddRange(data);
-                }
-                catch (HttpRequestException ex)
-                {
-                    Console.WriteLine($"HTTP Error for {symbol}: {ex.Message}");
-                }
+                var data = await _http.GetFromJsonAsync<List<StockQuote>>(url);
+                return data ?? new List<StockQuote>();
             }
-
-            return result;
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"HTTP Error: {ex.Message}");
+                return new List<StockQuote>();
+            }
         }
     }
 }

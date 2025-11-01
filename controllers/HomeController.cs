@@ -23,9 +23,9 @@ namespace ChatSite.Controllers
             var products = stocks.Select(s => new Product
             {
                 Id = s.Symbol.GetHashCode(),
-                Name = string.IsNullOrEmpty(s.CompanyName) ? s.Symbol : s.CompanyName,
+                Name = s.Symbol,
                 Price = s.Price,
-                Sector = string.IsNullOrEmpty(s.Sector) ? "N/A" : s.Sector,
+                Sector = s.Sector,
                 Volume = 0,
                 PE = 0,
                 ROE = 0,
@@ -44,9 +44,9 @@ namespace ChatSite.Controllers
             var products = stocks.Select(s => new Product
             {
                 Id = s.Symbol.GetHashCode(),
-                Name = string.IsNullOrEmpty(s.CompanyName) ? s.Symbol : s.CompanyName,
+                Name = s.Symbol,
                 Price = s.Price,
-                Sector = string.IsNullOrEmpty(s.Sector) ? "N/A" : s.Sector,
+                Sector = s.Sector,
                 Volume = 0,
                 PE = 0,
                 ROE = 0,
