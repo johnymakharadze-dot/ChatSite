@@ -1,4 +1,4 @@
-namespace ChatSite.Models
+/*namespace ChatSite.Models
 {
     public class AnalystRating
     {
@@ -10,6 +10,6 @@ namespace ChatSite.Models
     }
 
 
-}
+}/*/
 
 
